@@ -13,7 +13,8 @@ var config = {
     scene: {
         preload: preload,
         create: create,
-        update: update
+        update: update,
+        fire:fire
     }
 };
 
@@ -22,9 +23,10 @@ var debris;
 var bullets;
 var player;
 var spaceBar;
-
+//var laser1;
 var laser;
-var lastFired = 0;
+var vx;
+var vu;
 var game = new Phaser.Game(config);
 
 function preload ()
@@ -47,7 +49,7 @@ function preload ()
     this.load.audio("explosion", "assets/sounds/explosion_Medium_2.wav");
     this.load.audio("laser", "assets/sounds/Rebel_Laser_2.wav");
     this.load.audio("engine", "assets/sounds/engine.wav");
-    this.load.audio("startengine", "assets/sounds/startengineengine.wav");
+    //this.load.audio("startengine", "assets/sounds/startengineengine.wav");
 }
 
 
@@ -83,70 +85,35 @@ function create ()
     player.setCollideWorldBounds(false);
 
     // add laser
-    var Bullet = new Phaser.Class({
-
-        Extends: Phaser.GameObjects.Image,
-
-        initialize:
-
-        function Bullet (scene)
-        {
-            Phaser.GameObjects.Image.call(this, scene, 0, 0, 'laser');
-
-            //bullet speed
-            this.speed = Phaser.Math.GetSpeed(500, 1);
-        },
-
-        fire: function (x, y)
-        {
-            // starting position of bullets (to fire from spaceship angle, x,y must be spaceships x,y)
-            this.setPosition(x, y - 30);
-
-            this.setActive(true);
-            this.setVisible(true);
-        },
-
-        update: function (time, delta)
-        {
-            this.y -= this.speed * delta;
-
-            if (this.y < -50)
-            {
-                this.setActive(false);
-                this.setVisible(false);
-            }
-        }
-
+    laser = this.physics.add.group({
+        defaultKey: 'laser',
+        maxSize: 100
     });
 
-    bullets = this.add.group({
-        classType: Bullet,
-        maxSize: 10,
-        runChildUpdate: true
-    });
-
-    speed = Phaser.Math.GetSpeed(300, 1);
 
     
     // collider(s)
     this.physics.add.collider(player, debris);
     this.physics.add.collider(debris, debris);
+    this.physics.add.collider(laser, debris);
+    player.body.collideWorldBounds=true;
 
     // main text in screen
     text = this.add.text(10, 10, '', { font: '16px Courier', fill: '#00ff00' });
+    angletext = this.add.text(10, 50, '', { font: '16px Courier', fill: '#00ff00' });
+
 
     //add keymapping
     cursors = this.input.keyboard.createCursorKeys();
-
     spaceBar = this.input.keyboard.addKey('Space');
     shoot = this.input.keyboard.addKey('W');
     
     //game.input.mouse.capture = true;
 }
 
-function update(time, delta) {
+function update() {
 
-    // spaceship movement
+    // spaceship movement //
 
     // up cursor
     if (cursors.up.isDown && player.body.speed < 100) {
@@ -173,10 +140,10 @@ function update(time, delta) {
     if (cursors.down.isDown) {
         player.setDrag(0.98);
         //  slow reverse
-        if (player.body.speed < 10) {
+        if (player.body.speed < 1) {
             player.setAcceleration(0.1)
             this.physics.velocityFromAngle(player.angle - 90,
-                -9, player.body.velocity);
+                0, player.body.velocity);
         }
     } else {
         player.setDrag(0.999);
@@ -209,27 +176,48 @@ function update(time, delta) {
     debris.angle +=0.1;
 
 
-    //fire
-    if (shoot.isDown && time > lastFired){
-        var bullet = bullets.get();
-        laser.play();
+    // FIRE //
 
-        if (bullet)
-        {
-            bullet.fire(player.x, player.y);
-
-            lastFired = time + 150;
-        }
+    // call fire function when 'w' is down
+    if (shoot.isDown){
+        const vec = this.physics.velocityFromAngle(player.angle-86, 1)
+        vx = vec.x * 200;
+        vy = vec.y * 200;
+        var myangle = player.angle
+        fire(vx,vy, myangle);
     }
+
+    // destroy bullets when they reach the end of screen
+    laser.children.each(function(b) {
+        if (b.active) {
+            if (b.y < 0 || b.x < 0 || b.x > 1200 || b.y > 1000) {
+                b.setActive(false);
+                //b.kill();
+            }
+        }
+    }.bind(this));
+
+
 
     // show text in screen
     text.setText('Speed: ' + player.body.speed);
+    angletext.setText('Angle: ' + player.angle);
 
     // when reaching edge, repeat map
     this.physics.world.wrap(player, 32);
+    
 
 }
 
 
 
-
+ function fire(vx,vy, myangle) {
+    var laserbullet = this.laser.get(player.x , player.y);
+    if (laserbullet) {
+        laserbullet.setActive(true);
+        laserbullet.setVisible(true);
+        laserbullet.angle = myangle
+        laserbullet.body.velocity.y = vy;
+        laserbullet.body.velocity.x = vx;
+    }
+}
