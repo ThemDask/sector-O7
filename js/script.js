@@ -54,18 +54,8 @@ function preload ()
 
 function create ()
 {  
-     // add background etc
+     // add background 
     this.add.image(640, 512, 'space2');
-    
-    // add space debris and group
-    debris = this.physics.add.staticGroup();
-
-    debris.create(400, 100, 'debris2').setScale(1.5).refreshBody(); //refresh body epeidi kaname resize
-    debris.create(600, 400, 'debris2');
-    debris.create(50, 250, 'debris');
-    debris.create(750, 220, 'debris');
-    debris.create(1000, 250, 'debris');
-    debris.create(200, 500, 'debris2');
 
     // add sounds
     lasersound = this.sound.add("laser", { loop: false });
@@ -73,6 +63,17 @@ function create ()
     explosion = this.sound.add("explosion", { loop: false });
     startengine = this.sound.add("startengine", { loop: false });
     engine =  this.sound.add("engine", { loop: false });
+    
+    // add space debris and group
+    debris = this.physics.add.group({runChildUpdate: true,collideWorldBounds: true});
+
+    debris.create(400, 100, 'debris2').setBounce(0.2).setDrag(0.99); //refresh body epeidi kaname resize
+    debris.create(600, 400, 'debris2').setBounce(0.2).setDrag(0.99);
+    debris.create(50, 250, 'debris').setBounce(0.2).setDrag(0.99);
+    debris.create(750, 220, 'debris').setBounce(0.2).setDrag(0.99);
+    debris.create(1000, 250, 'debris').setBounce(0.2).setDrag(0.99);
+    debris.create(200, 500, 'debris2').setBounce(0.2).setDrag(0.99);
+
 
     // add player (spaceship)
     player = this.physics.add.image(620, 800, 'ship').setDepth(1);
@@ -84,6 +85,7 @@ function create ()
     
     player.setCollideWorldBounds(false);
 
+
     // add laser
     laser = this.physics.add.group({
         defaultKey: 'laser',
@@ -91,15 +93,14 @@ function create ()
     });
 
    
-    // collider(s)
-    this.physics.add.collider(player, debris);
+    // colliders
+    this.physics.add.collider(player, debris, debriscollision, null, this);
     this.physics.add.collider(debris, debris);
-    //this.physics.add.collider(laser, debris);
 
     //this.physics.add.collider(this.laser, debris, bulletCollide(this.laser), null, this);
 
     player.body.collideWorldBounds=true;
-
+    debris.collideWorldBounds=true;
 
     // main text in screen
     text = this.add.text(10, 10, '', { font: '16px Courier', fill: '#00ff00' });
@@ -175,8 +176,7 @@ function update(time) {
 
 
     // rotating meteors
-    //trash.setOrigin(0,0);
-    debris.angle +=0.1;
+    debris.angle += 2;
 
 
     // FIRING //
@@ -230,3 +230,8 @@ function update(time) {
 // function bulletCollide (thislaser) {
 //     thislaser.kill();
 //     }
+
+function debriscollision (player, debris){
+    player.body.speed -= 80;
+    //player.setAcceleration(-5);
+}
