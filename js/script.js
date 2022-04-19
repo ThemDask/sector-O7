@@ -6,8 +6,8 @@ var config = {
         default: 'arcade',
         arcade: {
             fps: 60,
-            gravity: { y: 0, x:0 }
-            //debug: false
+            gravity: { y: 0, x:0 },
+            debug: false
         }
     },
     scene: {
@@ -18,19 +18,26 @@ var config = {
     }
 };
 
+// declare variables
+var lastaudio = 0;
 var lastfired = 0;
+var audioconfig;
+
 var debris;
-var bullets;
 var player;
 var spaceBar;
-//var laser1;
+var engineclosed = false;
 var laser;
+var laserbullet;
+
 var vx;
 var vu;
+
 var game = new Phaser.Game(config);
 
 function preload ()
 {
+    // load images/sprites
     this.load.image('space2', 'assets/space2.jpg');
     
     this.load.image('space', 'assets/space.png');
@@ -43,12 +50,14 @@ function preload ()
 
     this.load.image('laser', 'assets/redlaser.png');
 
+    this.load.image('explosion', 'assets/explosion.png');
+
     // load sounds
-    this.load.audio("explosion", "assets/sounds/explosion_Medium_2.wav");
+    this.load.audio("explosionsound", "assets/sounds/explosion_Medium_2.wav");
     this.load.audio("laser", "assets/sounds/Rebel_Laser_2.wav");
     this.load.audio("piou", "assets/sounds/piou.mp3");
     this.load.audio("engine", "assets/sounds/engine.wav");
-    //this.load.audio("startengine", "assets/sounds/startengineengine.wav");
+    this.load.audio("startengine", "assets/sounds/startengine.mp3");
 }
 
 
@@ -60,21 +69,28 @@ function create ()
     // add sounds
     lasersound = this.sound.add("laser", { loop: false });
     piousound = this.sound.add("piou", { loop: false });
-    explosion = this.sound.add("explosion", { loop: false });
+    explosion = this.sound.add("explosionsound", { loop: false });
     startengine = this.sound.add("startengine", { loop: false });
-    engine =  this.sound.add("engine", { loop: false });
+    engine =  this.sound.add("engine", { loop: true });
     
+    audioconfig = {
+        mute: false,
+        volume: 1,
+        rate: 1,
+        loop: false
+    }
+
     // add space debris and group
     debris = this.physics.add.group({runChildUpdate: true,collideWorldBounds: true});
 
-    debris.create(400, 100, 'debris2').setBounce(0.2).setDrag(0.99); //refresh body epeidi kaname resize
-    debris.create(600, 400, 'debris2').setBounce(0.2).setDrag(0.99);
-    debris.create(50, 250, 'debris').setBounce(0.2).setDrag(0.99);
-    debris.create(750, 220, 'debris').setBounce(0.2).setDrag(0.99);
-    debris.create(1000, 250, 'debris').setBounce(0.2).setDrag(0.99);
-    debris.create(200, 500, 'debris2').setBounce(0.2).setDrag(0.99);
+    d1 = debris.create(400, 100, 'debris2').setBounce(0.2).setDrag(0.99).setScale(1.5); //refresh body epeidi kaname resize
+    d2 = debris.create(600, 400, 'debris2').setBounce(0.2).setDrag(0.99);
+    d3 = debris.create(50, 250, 'debris').setBounce(0.2).setDrag(0.99);
+    d4 = debris.create(750, 220, 'debris').setBounce(0.2).setDrag(0.99).setScale(1.5);
+    d5 = debris.create(1000, 250, 'debris').setBounce(0.2).setDrag(0.99);
+    d6 = debris.create(200, 500, 'debris2').setBounce(0.2).setDrag(0.99).setScale(1.5);
 
-
+    
     // add player (spaceship)
     player = this.physics.add.image(620, 800, 'ship').setDepth(1);
 
@@ -85,19 +101,16 @@ function create ()
     
     player.setCollideWorldBounds(false);
 
-
     // add laser
     laser = this.physics.add.group({
         defaultKey: 'laser',
         maxSize: 100
     });
 
-   
     // colliders
     this.physics.add.collider(player, debris, debriscollision, null, this);
     this.physics.add.collider(debris, debris);
-
-    //this.physics.add.collider(this.laser, debris, bulletCollide(this.laser), null, this);
+    this.physics.add.collider(laser, debris, bulletCollide, null, this);
 
     player.body.collideWorldBounds=true;
     debris.collideWorldBounds=true;
@@ -111,12 +124,10 @@ function create ()
     cursors = this.input.keyboard.createCursorKeys();
     spaceBar = this.input.keyboard.addKey('Space');
     shoot = this.input.keyboard.addKey('W');
-    
-    //game.input.mouse.capture = true;
+
 }
 
 function update(time) {
-
     // spaceship movement //
 
     // up cursor
@@ -126,24 +137,26 @@ function update(time) {
             this.physics.velocityFromAngle(player.angle - 90,
                 100, player.body.velocity);  
         }
-    } else {
+    }   
+    else {
         player.setAcceleration(0);
     }
+
     // left cursor
     if (cursors.left.isDown) {
         player.setAngularVelocity(-50);
-        //player.setVelocityX(-20)
-        // right cursor
+        
+    // right cursor
     } else if (cursors.right.isDown) {
         player.setAngularVelocity(50);
-        //player.setVelocityX(20)
     } else {
         player.setAngularVelocity(0);
     }
+
     //down cursor
     if (cursors.down.isDown) {
         player.setDrag(0.98);
-        //  slow reverse
+        //  slow 
         if (player.body.speed < 1) {
             player.setAcceleration(0.1)
             this.physics.velocityFromAngle(player.angle - 90,
@@ -163,6 +176,7 @@ function update(time) {
     // spacebar key boost
     if (spaceBar.isDown && player.body.speed > 90 ){
         player.setTexture('shipboost')   
+        //startengine.play();
         this.physics.velocityFromAngle(player.angle - 90,
             150, player.body.velocity);   
         if (player.body.speed > 90){
@@ -170,14 +184,25 @@ function update(time) {
         }
     }
 
-    if (player.body.speed > 10){
-        //engine.play();
+    // engine sounds
+    if (player.body.speed > 10 && time > lastaudio){
+        engine.play();
+        lastaudio = time + 2000;
+        engineclosed = false;
+    } else if (player.body.speed < 10){
+        engine.stop();
+        engineclosed = true;
     } 
-
+    
 
     // rotating meteors
-    debris.angle += 2;
-
+     d1.rotation += 0.002
+     d2.rotation -= 0.003
+     d3.rotation += 0.001
+     d4.rotation += 0.002
+     d5.rotation -= 0.002
+     d6.rotation += 0.003
+    
 
     // FIRING //
 
@@ -209,14 +234,15 @@ function update(time) {
     // show text in screen
     text.setText('Speed: ' + player.body.speed);
     angletext.setText('Angle: ' + player.angle);
-
-    // when reaching edge, repeat map
-    this.physics.world.wrap(player, 32);
     
 }
 
- function fire(vx,vy, myangle) {
-    var laserbullet = this.laser.get(player.x , player.y);
+
+// extra funtions //
+
+// fire function
+function fire(vx,vy, myangle) {
+    laserbullet = this.laser.get(player.x , player.y);
     if (laserbullet) {
         laserbullet.setActive(true);
         laserbullet.setVisible(true);
@@ -226,12 +252,18 @@ function update(time) {
     }
 }
 
+// COLLISION FUNCTIONS //
 
-// function bulletCollide (thislaser) {
-//     thislaser.kill();
-//     }
-
+// laser collides with debris
+function bulletCollide (debris, laserbullet,time) {
+    explosion.play();
+    laserbullet.destroy();
+    
+    debris.destroy();
+}
+    
+//  player collides with debris
 function debriscollision (player, debris){
     player.body.speed -= 80;
-    //player.setAcceleration(-5);
+    
 }
