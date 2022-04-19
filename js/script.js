@@ -53,7 +53,7 @@ function preload ()
     this.load.image('explosion', 'assets/explosion.png');
 
     // load sounds
-    this.load.audio("explosionsound", "assets/sounds/explosion_Medium_2.wav");
+    this.load.audio("explosionsound", "assets/sounds/Explosion_Medium_2.wav");
     this.load.audio("laser", "assets/sounds/Rebel_Laser_2.wav");
     this.load.audio("piou", "assets/sounds/piou.mp3");
     this.load.audio("engine", "assets/sounds/engine.wav");
