@@ -7,5 +7,5 @@
 * use the arrows to move around; be mindful of the 0 gravity effect.
 * press the 'w' key to fire weapon.
 
-
+#### Note: if the collisions dont work, refresh and hope for the best :)
 
