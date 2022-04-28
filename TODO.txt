@@ -1,0 +1,5 @@
+- change order of scene loading to fix trasfering of player/add a loading screen
+- add mines
+- add whole dialog 
+
+--- end of 1st mission ---
