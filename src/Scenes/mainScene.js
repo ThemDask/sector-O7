@@ -1,5 +1,7 @@
 // Scene to handle player & movement
 
+import textScene from "./textScene.js";
+
 export default class mainScene extends Phaser.Scene {
     constructor() {
         super({key: 'mainScene', active: true})
@@ -16,6 +18,8 @@ export default class mainScene extends Phaser.Scene {
         this.load.image('shipmove', './assets/shipmove.png');
         this.load.image('shipboost', './assets/shipboost.png');
 
+        this.load.image('spacestation', './assets/spacestation.png');
+
         // load sounds
         this.load.audio("engine", "./assets/sounds/engine.wav");
         this.load.audio("startengine", "./assets/sounds/startengine.wav");
@@ -24,6 +28,10 @@ export default class mainScene extends Phaser.Scene {
     create () {  
         // add background 
         this.add.image(640, 512, 'space2');
+        // add space station
+        station = this.physics.add.image(565,780, 'spacestation');
+        station.setImmovable(true);
+        station.setDepth(0);
 
         // add audio
         audioconfig = {
@@ -44,52 +52,48 @@ export default class mainScene extends Phaser.Scene {
         d6 = debris.create(200, 500, 'debris2').setBounce(0.2).setDrag(0.99).setScale(1.5);
 
         // add player (spaceship)
-        player = this.physics.add.image(620, 800, 'ship').setDepth(1);
+        player = this.physics.add.image(620, 800, 'ship').setDepth(0);
         player.setDamping(true);
         player.setDrag(0.999);
         player.setBounce(0.2);
         player.setMaxVelocity(200); 
         player.setCollideWorldBounds(false);
+        //player.setImmovable(true);
 
         // colliders
         this.physics.add.collider(player, debris);
+        this.physics.add.collider(player, station, this.stationdock ,null, this);
         this.physics.add.collider(debris, debris);
-
         player.body.collideWorldBounds=true;
         debris.collideWorldBounds=true;
-
-        // main text in screen
-        text = this.add.text(10, 10, '', { font: '16px Courier', fill: '#00ff00' });
-        angletext = this.add.text(10, 50, '', { font: '16px Courier', fill: '#00ff00' });
         
     }   
 
     update() {
-
         //add keymapping
         var cursors = this.input.keyboard.createCursorKeys();
         var spaceBar = this.input.keyboard.addKey('Space');
+        var U = this.input.keyboard.addKey('U');
 
             // MOVEMENT //
         // up cursor
-        if (cursors.up.isDown && player.body.speed < 100) {
+        if (cursors.up.isDown && player.body.speed < 50) {
             player.setAcceleration(0.1);
-            if (player.body.speed < 100) {
+            if (player.body.speed < 50) {
                 this.physics.velocityFromAngle(player.angle - 90,
-                    100, player.body.velocity);  
+                    50, player.body.velocity);  
             }
         }   
         else {
             player.setAcceleration(0);
         }
 
-        // left cursor
+        // left cursor  
         if (cursors.left.isDown) {
-            player.setAngularVelocity(-50);
-            
+            player.setAngularVelocity(-25);
         // right cursor
         } else if (cursors.right.isDown) {
-            player.setAngularVelocity(50);
+            player.setAngularVelocity(25);
         } else {
             player.setAngularVelocity(0);
         }
@@ -113,12 +117,15 @@ export default class mainScene extends Phaser.Scene {
             player.setTexture('ship')
         } 
 
+        // TODO: add cooldown to boost
         // spacebar key boost
-        if (spaceBar.isDown && player.body.speed > 90 ){
+        if (spaceBar.isDown && player.body.speed > 40 ){
+            //var cooldowncounter = 0;
             player.setTexture('shipboost')   
-            //startengine.play();
+            //cooldowncounter ++;
+            //console.log(cooldowncounter)
             this.physics.velocityFromAngle(player.angle - 90,
-                150, player.body.velocity);   
+                75, player.body.velocity);   
             if (player.body.speed > 90){
                 player.setDrag(0.95);
             }
@@ -134,8 +141,6 @@ export default class mainScene extends Phaser.Scene {
         //     engineclosed = true;
         // } 
 
-
-
         // rotating meteors
         d1.rotation += 0.002
         d2.rotation -= 0.003
@@ -144,9 +149,12 @@ export default class mainScene extends Phaser.Scene {
         d5.rotation -= 0.002
         d6.rotation += 0.003
 
-        // show text in screen
-        text.setText('Speed: ' + player.body.speed);
-        angletext.setText('Angle: ' + player.angle); 
+    }
+
+    // station collision function
+    stationdock(player, station) {
+        this.physics.velocityFromAngle(player.angle - 90,
+            0, player.body.velocity);
     }
 
 }
@@ -163,7 +171,7 @@ export function transferdebris() {
 
 // declare global variables
 var player;
-
+var station;
 var debris;
 var d1;
 var d2;
@@ -172,7 +180,7 @@ var d4;
 var d5;
 var d6;
 
-var text;
-var angletext;
 
+
+var docking = 0;
 var audioconfig;
