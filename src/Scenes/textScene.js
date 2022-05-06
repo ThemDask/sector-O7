@@ -1,3 +1,4 @@
+
 // Scene to handle textbox
 export default class textScene extends Phaser.Scene {
     constructor(){
@@ -5,10 +6,20 @@ export default class textScene extends Phaser.Scene {
     };
 
     preload(){
+
         this.load.scenePlugin('rexuiplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js', 'rexUI', 'rexUI');
+
+        loadingScreen(this);
     }
 
     create(){   
+        
+        // start textScene after 1 second delay
+        this.scene.sleep();
+        setTimeout(() => {
+            this.scene.wake();
+          }, 1500);
+
         // simple dialog config - used in simple dialog cases (no choices)
         simpledialogconfig = {
             x: 400,
@@ -17,6 +28,7 @@ export default class textScene extends Phaser.Scene {
         
             background: this.rexUI.add.roundRectangle(0, 0, 100, 100, 2, 0x607D8B),
         
+            
             title: createLabel(this, 'Kadd the Engineer'),
 
             content: createLabel(this, 'So, what do you think?'),
@@ -191,6 +203,8 @@ export default class textScene extends Phaser.Scene {
             }
         }, this);
 
+
+
     }
 
 
@@ -229,3 +243,5 @@ var simpledialogconfig;
 var choicedialogconfig;
 var times=0;
 var clicked = false;
+
+import { loadingScreen } from "../loadingscreen.js";

@@ -1,5 +1,5 @@
-- change order of scene loading to fix trasfering of player/add a loading screen
+- change order of scene loading to fix trasfering of player
 - add mines
 - add whole dialog 
-
+- finish loading screen
 --- end of 1st mission ---

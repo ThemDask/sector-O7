@@ -1,4 +1,3 @@
-import { transferplayer, transferdebris } from "./mainScene.js";
 
 // scene to handle weapon fire & bullet collisions
 export default class combatScene extends Phaser.Scene  {
@@ -10,6 +9,8 @@ export default class combatScene extends Phaser.Scene  {
         this.load.image('laser', './assets/redlaser.png');
         this.load.audio("explosionsound", "./assets/sounds/Explosion_Medium_2.wav");
         this.load.audio("laseraudio", "./assets/sounds/fire.wav");
+
+        loadingScreen(this);
     }
 
     create() {
@@ -94,7 +95,8 @@ var laser;
 var laserbullet;
 var lasersound;
 
-
-
+// import dependencies
+import { transferplayer, transferdebris } from "./mainScene.js";
+import { loadingScreen } from "../loadingscreen.js";
 
 

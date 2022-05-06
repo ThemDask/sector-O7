@@ -1,7 +1,5 @@
+
 // Scene to handle player & movement
-
-import textScene from "./textScene.js";
-
 export default class mainScene extends Phaser.Scene {
     constructor() {
         super({key: 'mainScene', active: true})
@@ -20,20 +18,32 @@ export default class mainScene extends Phaser.Scene {
 
         this.load.image('spacestation', './assets/spacestation.png');
 
-        // load sounds
+        // load audio
         this.load.audio("engine", "./assets/sounds/engine.wav");
         this.load.audio("startengine", "./assets/sounds/startengine.wav");
+        this.load.audio("stopengine", "./assets/sounds/stopengine.wav");
+
+        loadingScreen(this);
+
     }
 
     create () {  
+
+        // if (player.body.speed < 10 & player.body.speed > 2 ){
+        //     startengine.play();
+        // }
+
         // add background 
         this.add.image(640, 512, 'space2');
         // add space station
-        station = this.physics.add.image(565,780, 'spacestation');
+        station = this.physics.add.image(565,780, 'spacestation').setScale(1.5);
         station.setImmovable(true);
         station.setDepth(0);
 
         // add audio
+        startengine = this.sound.add("startengine",audioconfig);
+        stopengine = this.sound.add("stopengine",audioconfig);
+
         audioconfig = {
             mute: false,
             volume: 1,
@@ -52,13 +62,17 @@ export default class mainScene extends Phaser.Scene {
         d6 = debris.create(200, 500, 'debris2').setBounce(0.2).setDrag(0.99).setScale(1.5);
 
         // add player (spaceship)
-        player = this.physics.add.image(620, 800, 'ship').setDepth(0);
+        player = this.physics.add.image(633, 800, 'ship').setDepth(0);
         player.setDamping(true);
         player.setDrag(0.999);
         player.setBounce(0.2);
         player.setMaxVelocity(200); 
         player.setCollideWorldBounds(false);
         //player.setImmovable(true);
+
+        // add fuel
+        fuel = 2000;
+        
 
         // colliders
         this.physics.add.collider(player, debris);
@@ -78,22 +92,25 @@ export default class mainScene extends Phaser.Scene {
             // MOVEMENT //
         // up cursor
         if (cursors.up.isDown && player.body.speed < 50) {
-            player.setAcceleration(0.1);
-            if (player.body.speed < 50) {
-                this.physics.velocityFromAngle(player.angle - 90,
-                    50, player.body.velocity);  
-            }
+            //  START/STOP SCENE
+            this.scene.stop("textScene");
+            player.body.acceleration.setToPolar(player.rotation+55, 30);
+            //if (player.body.speed < 50) {
+            //     this.physics.velocityFromAngle(player.angle - 90,
+            //         50, player.body.velocity);  
+            // }
         }   
         else {
             player.setAcceleration(0);
+            player.setDrag(0.99);
         }
 
         // left cursor  
         if (cursors.left.isDown) {
-            player.setAngularVelocity(-25);
+            player.setAngularVelocity(-30);
         // right cursor
         } else if (cursors.right.isDown) {
-            player.setAngularVelocity(25);
+            player.setAngularVelocity(30);
         } else {
             player.setAngularVelocity(0);
         }
@@ -117,30 +134,21 @@ export default class mainScene extends Phaser.Scene {
             player.setTexture('ship')
         } 
 
-        // TODO: add cooldown to boost
         // spacebar key boost
         if (spaceBar.isDown && player.body.speed > 40 ){
-            //var cooldowncounter = 0;
             player.setTexture('shipboost')   
-            //cooldowncounter ++;
-            //console.log(cooldowncounter)
-            this.physics.velocityFromAngle(player.angle - 90,
-                75, player.body.velocity);   
-            if (player.body.speed > 90){
-                player.setDrag(0.95);
+            if (player.body.speed < 80){
+                player.body.acceleration.setToPolar(player.rotation+55, 20);
             }
         }
 
-        // engine sounds
-        // if (player.body.speed > 10 && time > lastaudio){
-        //     engine.play();
-        //     lastaudio = time + 2000;
-        //     engineclosed = false;
-        // } else if (player.body.speed < 10){
-        //     engine.stop();
-        //     engineclosed = true;
-        // } 
-
+        // manage fuel
+        if (fuel == 0 ){
+            player.setAcceleration(0);
+        } else if (fuel > 0 && player.body.speed > 9.9){
+            fuel -=1;
+        }
+        
         // rotating meteors
         d1.rotation += 0.002
         d2.rotation -= 0.003
@@ -152,17 +160,26 @@ export default class mainScene extends Phaser.Scene {
     }
 
     // station collision function
-    stationdock(player, station) {
+    stationdock(player) {
         this.physics.velocityFromAngle(player.angle - 90,
-            0, player.body.velocity);
+            0.1, player.body.velocity);
+        // refuel
+        if (fuel < 2000){
+            fuel += 2;
+        }
+        
     }
-
 }
 
-//transfer player object & debris to other scenes
+//transfer player object & fuel to other scenes
 export function transferplayer() {
     return player;
 }
+
+export function transferfuel() {
+    return fuel;
+}
+
 
 export function transferdebris() {
     var debristotransfer = [d1,d2,d3,d4,d5,d6]
@@ -180,7 +197,14 @@ var d4;
 var d5;
 var d6;
 
-
-
 var docking = 0;
+
+var startengine;
+var stopengine;
 var audioconfig;
+
+var fuel;
+
+// import dependencies
+import { loadingScreen } from "../loadingscreen.js";import textScene from "./textScene.js";
+
