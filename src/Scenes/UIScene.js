@@ -11,6 +11,8 @@ export default class UIScene extends Phaser.Scene {
         this.load.image('hud', '../assets/hud2.png')
         this.load.image('combathud', '../assets/combathud.png')
         this.load.image('fuelhud', '../assets/fuelhud.png')
+
+        loadingScreen(this);
     }
 
     create(){
@@ -46,5 +48,6 @@ var angletext;
 var weapontext;
 var fueltext;
 var player;
-
 var fuel;
+
+import { loadingScreen } from "../loadingscreen.js";

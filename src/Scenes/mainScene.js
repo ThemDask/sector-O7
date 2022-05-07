@@ -1,5 +1,5 @@
 
-// Scene to handle player & movement
+// Scene to handle player, space station, debris & movement
 export default class mainScene extends Phaser.Scene {
     constructor() {
         super({key: 'mainScene', active: true})

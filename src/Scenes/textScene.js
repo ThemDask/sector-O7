@@ -26,7 +26,7 @@ export default class textScene extends Phaser.Scene {
             y: 400,
             width: 600,
         
-            background: this.rexUI.add.roundRectangle(0, 0, 100, 100, 2, 0x607D8B),
+            background: this.rexUI.add.roundRectangle(0, 0, 100, 100, 2, 0x2F2F37, 0x2F2F37),
         
             
             title: createLabel(this, 'Kadd the Engineer'),
@@ -80,7 +80,7 @@ export default class textScene extends Phaser.Scene {
             y: 400,
             width: 600,
         
-            background: this.rexUI.add.roundRectangle(0, 0, 100, 100, 2, 0x607D8B),
+            background: this.rexUI.add.roundRectangle(0, 0, 100, 100, 2, 0x2F2F37, 0x2F2F37),
         
             title: createLabel(this, '-playername-').setDraggable(),
 
@@ -190,7 +190,6 @@ export default class textScene extends Phaser.Scene {
         .on('button.click', function(button) {
             if (button.name  == 1||button.name  == 2||button.name  == 3){
                 button.getElement('background').setStrokeStyle(1, 0x00FF00); 
-                console.log(button)
                 clicked = true;
             } else if (clicked){
                 dialog2.setActive(false);
@@ -202,8 +201,6 @@ export default class textScene extends Phaser.Scene {
 
             }
         }, this);
-
-
 
     }
 
@@ -218,10 +215,11 @@ export default class textScene extends Phaser.Scene {
 // text config
 var createLabel = function (scene, text, name) {
     return scene.rexUI.add.label({
-        width: 40, // Minimum width of roundRectangle
-        height: 40, // Minimum height of roundRectangle
+        width: 40, // Minimum width of Rectangle inside of dialog box
+        height: 40, // Minimum height of Rectangle inside of dialog box
       
-        background: scene.rexUI.add.roundRectangle(0, 0, 100, 4, 4, 0x5e92f3),
+        // Rectangle inside of dialog box
+        background: scene.rexUI.add.roundRectangle(0, 0, 100, 4, 4, 0x01004D),
 
         text: scene.add.text(0, 0, text, {
             fontSize: '16px'
