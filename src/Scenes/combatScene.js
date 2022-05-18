@@ -10,7 +10,7 @@ export default class combatScene extends Phaser.Scene  {
         this.load.audio("explosionsound", "./assets/sounds/Explosion_Medium_2.wav");
         this.load.audio("laseraudio", "./assets/sounds/fire.wav");
 
-        loadingScreen(this);
+        //loadingScreen(this);
     }
 
     create() {
@@ -28,15 +28,18 @@ export default class combatScene extends Phaser.Scene  {
 
         // add collider
         this.physics.add.collider(laser, debris, this.bulletcollision, null, this);
+
     }
 
     update(time) {
+        
        
         // update player object from mainScene
         var player = transferplayer();
         // keymapping
         var shoot = this.input.keyboard.addKey('W');
         
+
 
             // FIRING //
         // call fire class when 'w' is down
@@ -95,8 +98,7 @@ var laser;
 var laserbullet;
 var lasersound;
 
+
 // import dependencies
 import { transferplayer, transferdebris } from "./mainScene.js";
 import { loadingScreen } from "../loadingscreen.js";
-
-

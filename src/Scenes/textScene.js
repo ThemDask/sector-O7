@@ -13,7 +13,8 @@ export default class textScene extends Phaser.Scene {
     }
 
     create(){   
-        
+        // 600, 835
+
         // start textScene after 1 second delay
         this.scene.sleep();
         setTimeout(() => {
@@ -22,8 +23,8 @@ export default class textScene extends Phaser.Scene {
 
         // simple dialog config - used in simple dialog cases (no choices)
         simpledialogconfig = {
-            x: 400,
-            y: 400,
+            x: 840,
+            y: 985,
             width: 600,
         
             background: this.rexUI.add.roundRectangle(0, 0, 100, 100, 2, 0x2F2F37, 0x2F2F37),
@@ -216,7 +217,7 @@ export default class textScene extends Phaser.Scene {
 var createLabel = function (scene, text, name) {
     return scene.rexUI.add.label({
         width: 40, // Minimum width of Rectangle inside of dialog box
-        height: 40, // Minimum height of Rectangle inside of dialog box
+        height: 50, // Minimum height of Rectangle inside of dialog box
       
         // Rectangle inside of dialog box
         background: scene.rexUI.add.roundRectangle(0, 0, 100, 4, 4, 0x01004D),

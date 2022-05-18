@@ -7,8 +7,8 @@ import UIScene from "./Scenes/UIScene.js";
 // configuration of the game
 var config = {
     type: Phaser.AUTO,
-    width: 1280,
-    height: 1024,
+    width: 1920,
+    height: 1076,
     physics: {
         default: 'arcade',
         arcade: {
@@ -22,5 +22,3 @@ var config = {
 
 // init
 var game = new Phaser.Game(config);
-
-
