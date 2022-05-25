@@ -1,5 +1,5 @@
 
-// Scene to handle player, space station, debris & movement
+// Scene to handle player, debris & movement
 export default class mainScene extends Phaser.Scene {
     constructor() {
         super({key: 'mainScene', active: true})
@@ -12,16 +12,13 @@ export default class mainScene extends Phaser.Scene {
         this.load.image('debris', './assets/debris.png');
         this.load.image('debris2', './assets/debris2.png');
 
-        this.load.image('mine', './assets/mine.png');
+        this.load.spritesheet('mine', './assets/mine_anim.png', {frameWidth:64, frameHeight: 64});
         this.load.image('bomb', './assets/bomb.png');
 
         this.load.image('ship', './assets/ship.png');
         this.load.image('shipmove', './assets/shipmove.png');
         this.load.image('shipboost', './assets/shipboost.png');
         this.load.image('deadship', './assets/ship_black.png');
-
-        this.load.image('spacestation', './assets/spacestation.png');
-        this.load.image('spacestation2', './assets/spacestation_2.png');
 
         // load audio
         this.load.audio("engine", "./assets/sounds/engine.wav");
@@ -33,19 +30,8 @@ export default class mainScene extends Phaser.Scene {
     }
 
     create () {  
-
-        
         // add background 
         this.add.image(960, 540, 'space');
-
-        // add space stations
-        station = this.physics.add.image(565,780, 'spacestation').setScale(1.5);
-        station.setImmovable(true);
-        station.setDepth(0);
-
-        station2 = this.physics.add.image(1600,300, 'spacestation2').setScale(0.5);
-        station2.setImmovable(true);
-        station2.setDepth(0);
 
         // add audio
         startengine = this.sound.add("startengine",audioconfig);
@@ -75,11 +61,24 @@ export default class mainScene extends Phaser.Scene {
         // add mines in physics group
         mines = this.physics.add.group({runChildUpdate: true,collideWorldBounds: true});
 
+        this.anims.create({
+            key: 'mine_anim',
+            frames: this.anims.generateFrameNumbers('mine'),
+            frameRate: 4,
+            repeat: -1
+        });
+
         m1 = mines.create(200,100, 'mine').setScale(0.5);
         m2 = mines.create(500,200, 'mine').setScale(0.5);
         m3 = mines.create(870,400, 'mine').setScale(0.5);
         m4 = mines.create(1512,770, 'mine').setScale(0.5);
         m5 = mines.create(1256,312, 'mine').setScale(0.5);
+
+        m1.play('mine_anim');
+        m2.play('mine_anim');
+        m3.play('mine_anim');
+        m4.play('mine_anim');
+        m5.play('mine_anim');
 
         // add player (spaceship)
         player = this.physics.add.image(633, 800, 'ship').setDepth(0);
@@ -88,41 +87,48 @@ export default class mainScene extends Phaser.Scene {
         player.setBounce(0.2);
         player.setMaxVelocity(200); 
         player.setCollideWorldBounds(false);
-
-        // add fuel
-        fuel = 2000;    
+        player.fuel = 2000;
 
         // colliders
         this.physics.add.collider(player, debris);
-        this.physics.add.collider(player, station, this.stationdock, null, this);
+        
         this.physics.add.collider(debris, debris);         
         this.physics.add.collider(player, mines, this.minecollision, null, this);  
         
         player.body.collideWorldBounds=true;
         debris.collideWorldBounds=true;
 
-        //game over text create
+        //game over text create TODO: move to UI
         gameover_text = this.add.text(400,500, '', { font: '50px Courier', fill: '#ff0000' });
 
-        // stop combatScene just after loading to activate later
-        this.scene.stop('combatScene');
+        // pause combatScene just after loading to activate later
+        this.scene.pause('combatScene');
+
+        
+
         
     }   
 
     update(time) {
-        
-        //add keymapping
+        console.log(isEngineOn);
+        //add keymapping    
         var cursors = this.input.keyboard.createCursorKeys();
         var spaceBar = this.input.keyboard.addKey('Space');
         var R = this.input.keyboard.addKey('R');
 
         if (R.isDown && time > mode_timer ) {
-            // start combatScene 
-            this.scene.launch('combatScene');
-            combat = true;
-            //combattext.setText('ACTIVATED');           
-            mode_timer += 2000;
-            console.log('sd')
+            if(!isCombatMode) {
+                // start combatScene 
+                this.scene.run('combatScene');
+                isCombatMode = true          
+                mode_timer += 1000;
+            }
+            else {
+                this.scene.stop('combatScene');
+                isCombatMode = false
+                mode_timer += 1000;
+            }
+
         }
 
             // MOVEMENT //
@@ -131,10 +137,6 @@ export default class mainScene extends Phaser.Scene {
             //  START/STOP SCENE
             this.scene.stop("textScene");
             player.body.acceleration.setToPolar(player.rotation+55, 30);
-            //if (player.body.speed < 50) {
-            //     this.physics.velocityFromAngle(player.angle - 90,
-            //         50, player.body.velocity);  
-            // }
         }   
         else {
             player.setAcceleration(0);
@@ -143,9 +145,6 @@ export default class mainScene extends Phaser.Scene {
 
         // left cursor  
         if (cursors.left.isDown) {
-            // start combat scene
-            this.scene.launch(combatScene);
-
             player.setAngularVelocity(-30);
         // right cursor
         } else if (cursors.right.isDown) {
@@ -169,8 +168,10 @@ export default class mainScene extends Phaser.Scene {
         // thrusters show on movement
         if (player.body.speed > 10) {
             player.setTexture('shipmove')
+            isEngineOn = true;
         } else {
             player.setTexture('ship')
+            isEngineOn = false;
         } 
 
         // spacebar key boost
@@ -184,12 +185,12 @@ export default class mainScene extends Phaser.Scene {
         }
 
         // manage fuel
-        if (fuel == 0 ){
+        if (player.fuel == 0 ){
             player.setDrag(0.7);
             player.setAcceleration(0);
             player.setTexture('ship')
-        } else if (fuel > 0 && player.body.speed > 9.9){
-            fuel -=1;
+        } else if (player.fuel > 0 && player.body.speed > 9.9){
+            player.fuel -=1;
         }
         
         // rotating meteors
@@ -204,28 +205,14 @@ export default class mainScene extends Phaser.Scene {
         d9.rotation -= 0.001
         d10.rotation += 0.001
 
-        station2.rotation += 0.0004
-
         //manage player health
         if (health <= 0) {
             this.gameover();
             
         }
-
     }
 
-    // helper functions
-    // station collision function
-    stationdock(player) {
-        this.physics.velocityFromAngle(player.angle - 90,
-            0.1, player.body.velocity);
-        // refuel
-        if (fuel < 2000){
-            fuel += 2;
-        }
-        
-    }
-
+    //   helper functions
     //mine collision function
     minecollision(player, mine) {
         health -= 50;
@@ -240,18 +227,11 @@ export default class mainScene extends Phaser.Scene {
         this.input.keyboard.enabled = false;
         
     }
-
-    
-
 }
 
-//transfer player object & fuel to other scenes
+//transfer player (& fuel) to other scenes
 export function transferplayer() {
     return player;
-}
-
-export function transferfuel() {
-    return fuel;
 }
 
 export function transferhealth() {
@@ -259,9 +239,8 @@ export function transferhealth() {
 }
 
 export function transfercombat() {
-    return combat;
+    return isCombatMode;
 }
-
 
 export function transferdebris() {
     var debristotransfer = [d1,d2,d3,d4,d5,d6, d7, d8, d9, d10]
@@ -271,8 +250,6 @@ export function transferdebris() {
 // declare global variables
 var player;
 var health = 100;
-var station;
-var station2;
 
 var debris;
 var d1;
@@ -299,13 +276,12 @@ var startengine;
 var stopengine;
 var audioconfig;
 
-var combat = false;
-
-var fuel;
 var mode_timer = 0;
 
 var gameover_text;
+var isCombatMode = false;
+
+var isEngineOn = false;
 
 // import dependencies
-import { loadingScreen } from "../loadingscreen.js";import textScene from "./textScene.js";
-import combatScene from "./combatScene.js";
+import { loadingScreen } from "../loadingscreen.js";

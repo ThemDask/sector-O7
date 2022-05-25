@@ -1,4 +1,4 @@
-import { transferplayer,transferfuel,transferhealth, transfercombat } from "./mainScene.js";
+import { transferplayer, transferhealth, transfercombat } from "./mainScene.js";
 import { loadingScreen } from "../loadingscreen.js";
 
 // Scene to handle HUD & UI
@@ -7,12 +7,9 @@ export default class UIScene extends Phaser.Scene {
         super({key: 'UIScene', active: true})
     }
     preload(){
-        // load HUDs
-        //this.load.image('hud', '../assets/hud2.png');
-        this.load.image('fuelhud', '../assets/fuelhud.png');
+        // load HUDs, graphs & bars
         this.load.image('barhud', '../assets/barhud.png');
         this.load.image('combathud', '../assets/weaponhud.png');
-
         this.load.image('speedhud', '../assets/speedhud.png');
         this.load.image('speedhud_b', '../assets/speedhud_boost.png');
 
@@ -23,7 +20,6 @@ export default class UIScene extends Phaser.Scene {
 
         this.load.image('angleship', './assets/ship_black.png');
         this.load.image('anglehud_box', './assets/anglehud_box.png');
-
 
         loadingScreen(this);
     }
@@ -54,16 +50,12 @@ export default class UIScene extends Phaser.Scene {
     }
 
     update(){
-
-
-        // transfer player instance to get speed & angle
         player = transferplayer();
-        fuel = transferfuel();
         health = transferhealth();
-        var combat = transfercombat()
+        var combat = transfercombat() 
         
         // update health & fuel bars 
-        this.move_fuelbar(fuel);
+        this.move_fuelbar(player.fuel);
         this.move_healthbar(health);
         this.move_speedbar(player.body.speed);
 
@@ -76,15 +68,17 @@ export default class UIScene extends Phaser.Scene {
 
         // update combat text
         if (combat) {
-            
             combattext.setFill('#ff0000');
             combattext.setText('ACTIVATED');
+        } else {
+            combattext.setFill('#00ff00');
+            combattext.setText('DEACTIVATED');
         }
 
     }
 
     // UI helper functions
-    move_fuelbar(fuel, ){
+    move_fuelbar(fuel ){
         var pos = 1175;
         fuelbar.y = pos - (fuel/10);
     }
@@ -110,7 +104,6 @@ var speedtext;
 var combattext;
 
 var player;
-var fuel;
 var health;
 
 var fuelbar;
