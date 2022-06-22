@@ -1,6 +1,6 @@
 # RPG Spaceship game built on Phaser 3 Framework using Javascript ES6.
 ### Work In Progress
-#### https://themdask.github.io/sector-O7/
+#### Deployed: https://sssector.000webhostapp.com/
 
 
 
@@ -18,5 +18,5 @@
 * be careful of mines
 ### for a better overall experience, press f11 for full screen mode
 #
-#### Note: if the game is stuck on loading screen, hard refresh(ctrl+f5) and hope for the best :)
-#### Note 2: gh-pages link is deprecated. Instead, use https://sssector.000webhostapp.com/ for a better experience
+#### Note: if the game is stuck on loading screen, hard refresh(ctrl+f5) :)
+
