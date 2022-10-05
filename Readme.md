@@ -1,6 +1,9 @@
-# RPG Spaceship game built on Phaser 3 Framework using Javascript ES6.
+# RPG Spaceship game built on Phaser Framework using Javascript ES6.
 ### Work In Progress
 
+
+### How to Run
+upload files to a server and load "index.html" 
 
 ## Button Configuration
 
