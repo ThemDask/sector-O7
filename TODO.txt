@@ -1,9 +1,0 @@
-- change order of scene loading to fix trasfering of player
-- add whole dialog 
-- finish loading screen
-- add radio/news
---- end of 1st mission ---
-
-- better variable transfers (global??)
-- move code to corresponding files
-- add modal for menu/items(?)
