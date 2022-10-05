@@ -77,8 +77,8 @@ export default class textScene extends Phaser.Scene {
         // choice dialog config - used in dialog cases where the player
         // has to pick one from a set of dialog choices
         choicedialogconfig = {
-            x: 400,
-            y: 400,
+            x: 840,
+            y: 915,
             width: 600,
         
             background: this.rexUI.add.roundRectangle(0, 0, 100, 100, 2, 0x2F2F37, 0x2F2F37),
@@ -135,6 +135,7 @@ export default class textScene extends Phaser.Scene {
         .setDraggable('background')   
         .layout()
         .setActive(true)
+        .setDepth(0)
         .popUp(500);
 
         // create choice dialogue instance - disabled at start
@@ -142,6 +143,7 @@ export default class textScene extends Phaser.Scene {
         .setDraggable('background')   
         .layout()
         .setActive(false)
+        .setDepth(0)
         .popUp(500);
 
         // make smooth dialogue popup 
