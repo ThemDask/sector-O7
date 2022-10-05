@@ -15,15 +15,18 @@ export default class stationScene extends Phaser.Scene {
         loadingScreen(this);
     }
     create() {
-        
-        // add space stations on screen 
-        station = this.physics.add.image(565,780, 'spacestation').setScale(1.5);
-        station.setImmovable(true);
-        station.setDepth(0);
+        // lazy loading
+        this.scene.sleep();
+        setTimeout(() => {
+            this.scene.wake();
+          }, 400);
 
-        station2 = this.physics.add.image(1600,300, 'spacestation2').setScale(0.5);
-        station2.setImmovable(true);
-        station2.setDepth(0);
+    // add space stations on screen 
+    stations = this.physics.add.group({runChildUpdate: true,collideWorldBounds: true});
+
+    station = stations.create(565,780, 'spacestation').setScale(1.5).setImmovable(true).setDepth(0);
+    station2 = stations.create(1600,300, 'spacestation2').setScale(0.5).setImmovable(true).setDepth(0);
+
         
     }
     update() {
@@ -44,6 +47,6 @@ export default class stationScene extends Phaser.Scene {
     }
 
 }
-
+var stations;
 var station;
 var station2;

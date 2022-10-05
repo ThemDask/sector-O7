@@ -25,8 +25,13 @@ export default class UIScene extends Phaser.Scene {
     }
 
     create(){
+        // lazy loading
+        this.scene.sleep();
+        setTimeout(() => {
+            this.scene.wake();
+            }, 500);
+
         // create HUDs in x, y of scene
-        //this.add.image(99,47,'hud');
         this.add.image(1860,1000,'combathud');
         this.add.image(75,955,'barhud');
         this.add.image(1700,1030,'speedhud');
