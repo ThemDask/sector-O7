@@ -201,6 +201,7 @@ export default class textScene extends Phaser.Scene {
                 simpledialogconfig.content.text = 'Take it for a spin. You’ll start to get the hang of it.';
                 dialog1.setActive(true);
                 dialog1.setVisible(true);
+                objective_started = true;
 
             }
         }, this);
@@ -237,12 +238,19 @@ var createLabel = function (scene, text, name) {
     });
 }
 
+
+
 // declare global variables
-var dialog1
+var objective_started = false;
+var dialog1;
 var dialog2;
 var simpledialogconfig;
 var choicedialogconfig;
 var times=0;
 var clicked = false;
+
+export function transferObjectiveState() {
+    return objective_started;
+}
 
 import { loadingScreen } from "../loadingscreen.js";

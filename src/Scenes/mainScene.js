@@ -110,7 +110,7 @@ export default class mainScene extends Phaser.Scene {
     }   
 
     update(time) {
-        console.log(isEngineOn);
+        //console.log(isEngineOn);
         //add keymapping    
         var cursors = this.input.keyboard.createCursorKeys();
         var spaceBar = this.input.keyboard.addKey('Space');

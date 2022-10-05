@@ -3,6 +3,7 @@ import textScene from "./Scenes/textScene.js";
 import combatScene from "./Scenes/combatScene.js";
 import UIScene from "./Scenes/UIScene.js";
 import stationScene from "./Scenes/stationScene.js";
+import objectivesScene from "./Scenes/objectivesScene.js";
 
 
 // configuration of the game
@@ -18,7 +19,7 @@ var config = {
             debug: false
         }
     },
-    scene: [mainScene, textScene, combatScene, UIScene, stationScene]
+    scene: [mainScene, textScene, combatScene, UIScene, stationScene, objectivesScene]
 };
 
 // init
