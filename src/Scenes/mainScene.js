@@ -47,7 +47,7 @@ export default class mainScene extends Phaser.Scene {
         // add space debris in physics group
         debris = this.physics.add.group({runChildUpdate: true,collideWorldBounds: true});
 
-        d1 = debris.create(400, 100, 'debris2').setBounce(0.2).setDrag(0.99).setScale(1.5); //refresh body epeidi kaname resize
+        d1 = debris.create(400, 100, 'debris2').setBounce(0.2).setDrag(0.99).setScale(1.5); 
         d2 = debris.create(600, 400, 'debris2').setBounce(0.2).setDrag(0.99);
         d3 = debris.create(50, 250, 'debris').setBounce(0.2).setDrag(0.99);
         d4 = debris.create(750, 220, 'debris').setBounce(0.2).setDrag(0.99).setScale(1.5);
@@ -88,6 +88,7 @@ export default class mainScene extends Phaser.Scene {
         player.setMaxVelocity(200); 
         player.setCollideWorldBounds(false);
         player.fuel = 2000;
+        player.health = 100;
 
         // colliders
         this.physics.add.collider(player, debris);
@@ -99,7 +100,7 @@ export default class mainScene extends Phaser.Scene {
         debris.collideWorldBounds=true;
 
         //game over text create TODO: move to UI
-        gameover_text = this.add.text(400,500, '', { font: '50px Courier', fill: '#ff0000' });
+        gameover_text = this.add.text(900,520, '', { font: '32px Roboto', fill: '#ff0000' });
 
         // pause combatScene just after loading to activate later
         this.scene.pause('combatScene');
@@ -190,7 +191,7 @@ export default class mainScene extends Phaser.Scene {
             player.setAcceleration(0);
             player.setTexture('ship')
         } else if (player.fuel > 0 && player.body.speed > 9.9){
-            player.fuel -=1;
+            player.fuel -=0.5;
         }
         
         // rotating meteors
@@ -206,7 +207,7 @@ export default class mainScene extends Phaser.Scene {
         d10.rotation += 0.001
 
         //manage player health
-        if (health <= 0) {
+        if (player.health <= 0) {
             this.gameover();
             
         }
@@ -215,8 +216,7 @@ export default class mainScene extends Phaser.Scene {
     //   helper functions
     //mine collision function
     minecollision(player, mine) {
-        health -= 50;
-        console.log(health);
+        player.health -= 50;
         mine.destroy();
     }
 
@@ -234,9 +234,9 @@ export function transferplayer() {
     return player;
 }
 
-export function transferhealth() {
-    return health;
-}
+// export function transferhealth() {
+//     return health;
+// }
 
 export function transfercombat() {
     return isCombatMode;
@@ -249,7 +249,7 @@ export function transferdebris() {
 
 // declare global variables
 var player;
-var health = 100;
+//var health = 100;
 
 var debris;
 var d1;

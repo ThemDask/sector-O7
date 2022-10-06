@@ -1,4 +1,4 @@
-import { transferplayer, transferhealth, transfercombat } from "./mainScene.js";
+import { transferplayer, transfercombat } from "./mainScene.js";
 import { loadingScreen } from "../loadingscreen.js";
 
 // Scene to handle HUD & UI
@@ -56,12 +56,12 @@ export default class UIScene extends Phaser.Scene {
 
     update(){
         player = transferplayer();
-        health = transferhealth();
+        //health = transferhealth();
         var combat = transfercombat() 
         
         // update health & fuel bars 
         this.move_fuelbar(player.fuel);
-        this.move_healthbar(health);
+        this.move_healthbar(player.health);
         this.move_speedbar(player.body.speed);
 
         // update ship model depending on player's angle
@@ -90,7 +90,7 @@ export default class UIScene extends Phaser.Scene {
 
     move_healthbar(health){
         var h_pos = 1175;
-        healthbar.y = h_pos - (health*2)
+        healthbar.y = h_pos - (player.health*2)
     }
 
     move_speedbar(speed){
@@ -109,7 +109,7 @@ var speedtext;
 var combattext;
 
 var player;
-var health;
+//var health;
 
 var fuelbar;
 var healthbar;

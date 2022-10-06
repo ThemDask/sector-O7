@@ -1,4 +1,5 @@
 import { transferplayer } from "./mainScene.js";
+//import { transferhealth } from "./mainScene.js";
 import { loadingScreen } from "../loadingscreen.js";
 
 // Scene to handle space stations & interactions with player
@@ -25,18 +26,17 @@ export default class stationScene extends Phaser.Scene {
     stations = this.physics.add.group({runChildUpdate: true,collideWorldBounds: true});
 
     station = stations.create(565,780, 'spacestation').setScale(1.5).setImmovable(true).setDepth(0);
-    station2 = stations.create(1600,300, 'spacestation2').setScale(0.5).setImmovable(true).setDepth(0);
+    shipyard = stations.create(1600,300, 'spacestation2').setScale(0.5).setImmovable(true).setDepth(0);
 
-        
     }
     update() {
-        station2.rotation += 0.0004
-
+        shipyard.rotation += 0.0004
         var player = transferplayer();
         this.physics.add.collider(player, station, this.stationdock, null, this);
+        this.physics.add.collider(player, shipyard, this.shipyarddock, null, this);
     }
 
-    // station collision function
+    // station collision functions
     stationdock(player) {
         this.physics.velocityFromAngle(player.angle - 90,
             0.1, player.body.velocity);
@@ -46,7 +46,29 @@ export default class stationScene extends Phaser.Scene {
         } 
     }
 
+    shipyarddock(player) {
+        // health = transferhealth();
+        // console.log(health);
+        if (player.fuel < 2000){
+            player.fuel += 4; // refuel
+        } 
+        if (player.health < 100) {
+            player.health += 0.5;    // regenerate hull 
+        }
+        this.physics.velocityFromAngle(player.angle - 90,
+            0.1, player.body.velocity);
+
+        docked = true;
+    }
+
 }
+
+export function is_docked() {
+    return docked;
+}
+
+var health;
+var docked = false;
 var stations;
 var station;
-var station2;
+var shipyard;

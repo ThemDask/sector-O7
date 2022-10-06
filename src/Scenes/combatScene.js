@@ -100,6 +100,8 @@ export default class combatScene extends Phaser.Scene  {
                 } 
             }
         }.bind(this));
+
+        console.log(debris_num);
         
     }
 
@@ -127,6 +129,7 @@ export default class combatScene extends Phaser.Scene  {
         explosionsound.play();
         laserbullet.destroy();
         debris.destroy();
+        debris_num -= 1;
     }
     
 
@@ -135,6 +138,8 @@ export default class combatScene extends Phaser.Scene  {
 //declare global variables
 var explosionsound;
 var lastfired = 0;
+
+var debris_num = transferdebris().length;
 
 var laser;
 var bluelaser;
@@ -145,6 +150,11 @@ var bluelasersound;
 
 var weapon;
 var weapon_switch_time = 0;
+
+
+export function get_debris_num() {
+    return debris_num;
+}
 
 // import dependencies
 import { transferplayer, transferdebris } from "./mainScene.js";
