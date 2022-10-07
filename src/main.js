@@ -4,6 +4,7 @@ import combatScene from "./Scenes/combatScene.js";
 import UIScene from "./Scenes/UIScene.js";
 import stationScene from "./Scenes/stationScene.js";
 import objectivesScene from "./Scenes/objectivesScene.js";
+import radioScene from "./Scenes/radioScene.js";
 
 
 // configuration of the game
@@ -19,7 +20,7 @@ var config = {
             debug: false
         }
     },
-    scene: [mainScene, textScene, combatScene, UIScene, stationScene, objectivesScene]
+    scene: [mainScene, textScene, combatScene, UIScene, stationScene, objectivesScene, radioScene]
 };
 
 // init

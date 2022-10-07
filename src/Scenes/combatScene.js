@@ -13,10 +13,20 @@ export default class combatScene extends Phaser.Scene  {
         this.load.audio("laseraudio", "./assets/sounds/fire.wav");
         this.load.audio("bluelaseraudio", "./assets/sounds/bluefire.wav");
 
+        this.load.spritesheet('explosion', './assets/explosion_animation.png', {frameWidth:96, frameHeight: 96}); 
+
         //loadingScreen(this);
     }
 
     create() {
+
+        // add explosion animation
+        this.anims.create({
+            key: 'explosion_anim',
+            frames: this.anims.generateFrameNumbers('explosion'),
+             frameRate: 16,
+        });
+
         // transfer debris from mainScene
         var debris = transferdebris();
 
@@ -24,7 +34,8 @@ export default class combatScene extends Phaser.Scene  {
         explosionsound = this.sound.add('explosionsound');
         lasersound = this.sound.add("laseraudio", { loop: false });
         bluelasersound = this.sound.add("bluelaseraudio", { loop: false });
-        // add laser                                                        
+
+        // add red laser                                                        
         laser = this.physics.add.group({
             defaultKey: 'laser',
             maxSize: 10
@@ -38,7 +49,6 @@ export default class combatScene extends Phaser.Scene  {
 
         // add colliders
         this.physics.add.collider(laser, debris, this.bulletcollision, null, this);
-
         this.physics.add.collider(bluelaser, debris, this.bulletcollision, null, this);
         //this.physics.add.collider(bluelaser, debris, this.bulletcollision, null, this); -- mine collisions
 
@@ -95,13 +105,11 @@ export default class combatScene extends Phaser.Scene  {
         // destroy bullets when they reach the end of screen 
         laser.children.each(function(b) {
             if (b.active) {
-                if (b.y < 0 || b.x < 0 || b.x > 1900 || b.y > 1050) {
+                if (b.y < 0 || b.x < 0 || b.x > 1950 || b.y > 1050) {
                     b.setActive(false);
                 } 
             }
         }.bind(this));
-
-        console.log(debris_num);
         
     }
 
@@ -126,10 +134,15 @@ export default class combatScene extends Phaser.Scene  {
 
     // bullet collision function
     bulletcollision(laserbullet, debris){
+        laserbullet.setImmovable(true);
         explosionsound.play();
         laserbullet.destroy();
-        debris.destroy();
+        debris.play('explosion_anim');
         debris_num -= 1;
+        debris.setVelocity(0);
+        setTimeout(() => {
+            debris.destroy();
+          }, "1000")
     }
     
 

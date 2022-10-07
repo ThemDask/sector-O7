@@ -4,9 +4,9 @@ export default class objectivesScene extends Phaser.Scene {
         super({key: 'objectivesScene', active: true})
     }
 
-    preload () {
+    // preload () {
 
-    }
+    // }
 
     create () {
         objectiveText = this.add.text(1650, 820, '',
@@ -32,10 +32,8 @@ export default class objectivesScene extends Phaser.Scene {
 
         if (obj1State == "☑" && obj2State == "☑") {
             console.log('finished');
-            finishText.text = "FINISHED";
+            finishText.text = "MISSION COMPLETE";
         }
-
-        
 
         
     }

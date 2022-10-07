@@ -47,18 +47,19 @@ export default class stationScene extends Phaser.Scene {
     }
 
     shipyarddock(player) {
-        // health = transferhealth();
-        // console.log(health);
         if (player.fuel < 2000){
             player.fuel += 4; // refuel
         } 
         if (player.health < 100) {
             player.health += 0.5;    // regenerate hull 
         }
+
         this.physics.velocityFromAngle(player.angle - 90,
             0.1, player.body.velocity);
 
         docked = true;
+        player.x = shipyard.x;
+        player.y =shipyard.y;
     }
 
 }
