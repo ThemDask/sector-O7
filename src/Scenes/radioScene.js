@@ -1,3 +1,5 @@
+import { loadingScreen } from "../loadingscreen.js";
+
 export default class radioScene extends Phaser.Scene {
     constructor() {
         super({key: 'radioScene', active: true})
@@ -5,6 +7,8 @@ export default class radioScene extends Phaser.Scene {
 
     preload () {
         this.load.image('radioHUD', './assets/radioHUD.png');
+
+        loadingScreen(this);
     }
 
     create () {

@@ -33,6 +33,9 @@ export default class objectivesScene extends Phaser.Scene {
         if (obj1State == "☑" && obj2State == "☑") {
             console.log('finished');
             finishText.text = "MISSION COMPLETE";
+
+            //this.scene.wake(mapScene);
+
         }
 
         
@@ -48,3 +51,4 @@ var obj2State = "☐";
 import { transferObjectiveState } from "./textScene.js";
 import { get_debris_num } from "./combatScene.js";
 import { is_docked } from "./stationScene.js";
+import mapScene from "./mapScene.js";

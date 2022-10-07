@@ -13,7 +13,7 @@ export default class combatScene extends Phaser.Scene  {
         this.load.audio("laseraudio", "./assets/sounds/fire.wav");
         this.load.audio("bluelaseraudio", "./assets/sounds/bluefire.wav");
 
-        this.load.spritesheet('explosion', './assets/explosion_animation.png', {frameWidth:96, frameHeight: 96}); 
+        this.load.spritesheet('explosion', './assets/explosion_animation.png', {frameWidth:64, frameHeight: 64}); 
 
         //loadingScreen(this);
     }

@@ -105,7 +105,7 @@ export default class mainScene extends Phaser.Scene {
         // pause combatScene just after loading to activate later
         this.scene.pause('combatScene');
 
-        
+
 
         
     }   
@@ -285,3 +285,4 @@ var isEngineOn = false;
 
 // import dependencies
 import { loadingScreen } from "../loadingscreen.js";
+import mapScene from "./mapScene.js";

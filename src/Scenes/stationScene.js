@@ -15,6 +15,7 @@ export default class stationScene extends Phaser.Scene {
 
         loadingScreen(this);
     }
+    
     create() {
         // lazy loading
         this.scene.sleep();
@@ -29,6 +30,7 @@ export default class stationScene extends Phaser.Scene {
     shipyard = stations.create(1600,300, 'spacestation2').setScale(0.5).setImmovable(true).setDepth(0);
 
     }
+
     update() {
         shipyard.rotation += 0.0004
         var player = transferplayer();
@@ -58,8 +60,8 @@ export default class stationScene extends Phaser.Scene {
             0.1, player.body.velocity);
 
         docked = true;
-        player.x = shipyard.x;
-        player.y =shipyard.y;
+        // player.x = shipyard.x;
+        // player.y =shipyard.y;
     }
 
 }
