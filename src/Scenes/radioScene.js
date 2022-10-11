@@ -12,6 +12,7 @@ export default class radioScene extends Phaser.Scene {
     }
 
     create () {
+        //this.scene.sleep();
 
         this.add.image(200, 27, 'radioHUD');
 
@@ -19,15 +20,21 @@ export default class radioScene extends Phaser.Scene {
         { font: '20px Roboto', fill: '#ffffff' }).setDepth(0);
 
         crop_x = 290;
-        radioText.text = "Did you ever hear the tragedy of Darth Plagueis The Wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… He had such a knowledge of the dark side that he could even keep the ones he cared about from dying...";
+        radioText.text = "Good Morning Everyone!   You're listening to Space FM 102.3.   All the alien jams from outer space right here, right now!    No brakes, no games.    Just music for your soul! ";
         radioText.setCrop(0,0,crop_x,50);  
     }
 
     update () {
-        radioText.x -= 0.5;
-        crop_x +=0.5;
+        radioText.x -= 0.6;
+        crop_x +=0.6;
 
+        //console.log(radioText.x)
         radioText.setCrop(0,0,crop_x,50); 
+
+        if (radioText.x <= -1500) { //repeat radio text
+            radioText.x = 100
+            crop_x = 290
+        }
     }
 
 }

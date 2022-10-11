@@ -25,8 +25,10 @@ export default class UIScene extends Phaser.Scene {
     }
 
     create(){
-        // lazy loading
+
         this.scene.sleep();
+        // lazy loading
+        
         setTimeout(() => {
             this.scene.wake();
             }, 500);
@@ -51,7 +53,7 @@ export default class UIScene extends Phaser.Scene {
         weapontext = this.add.text(1810, 965, 'NONE', { font: '18px Courier', fill: '#ff0000' });
         combattext = this.add.text(1810, 1047, 'DEACTIVATED', { font: '14px Courier', fill: '#00ff00' }).setDepth(0);
 
-    
+        
     }
 
     update(){

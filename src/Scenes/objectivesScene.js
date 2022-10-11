@@ -9,6 +9,8 @@ export default class objectivesScene extends Phaser.Scene {
     // }
 
     create () {
+        //this.scene.sleep();
+        
         objectiveText = this.add.text(1650, 820, '',
          { font: '16px Roboto', fill: '#ffffff' }).setDepth(0);
 

@@ -16,10 +16,10 @@ export default class textScene extends Phaser.Scene {
         // 600, 835
 
         // start textScene after 1 second delay
-        this.scene.sleep();
-        setTimeout(() => {
-            this.scene.wake();
-          }, 1500);
+        // this.scene.sleep();
+        // setTimeout(() => {
+        //     this.scene.wake();
+        //   }, 1500);
 
         // simple dialog config - used in simple dialog cases (no choices)
         simpledialogconfig = {

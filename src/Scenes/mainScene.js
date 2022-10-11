@@ -29,9 +29,9 @@ export default class mainScene extends Phaser.Scene {
 
     }
 
-    create () {  
+    create () {          
         // add background 
-        this.add.image(960, 540, 'space');
+        this.add.image(960, 540, 'space').setDepth(0);
 
         // add audio
         startengine = this.sound.add("startengine",audioconfig);
@@ -106,7 +106,7 @@ export default class mainScene extends Phaser.Scene {
         this.scene.pause('combatScene');
 
 
-
+        
         
     }   
 

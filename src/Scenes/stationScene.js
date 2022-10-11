@@ -17,6 +17,7 @@ export default class stationScene extends Phaser.Scene {
     }
     
     create() {
+        
         // lazy loading
         this.scene.sleep();
         setTimeout(() => {
