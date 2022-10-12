@@ -1,11 +1,4 @@
 import { loadingScreen } from "../loadingscreen.js";
-import combatScene from "./combatScene.js";
-import mainScene from "./mainScene.js";
-import objectivesScene from "./objectivesScene.js";
-import radioScene from "./radioScene.js";
-import stationScene from "./stationScene.js";
-import textScene from "./textScene.js";
-import UIScene from "./UIScene.js";
 
 
 export default class mapScene extends Phaser.Scene {
@@ -70,8 +63,13 @@ export default class mapScene extends Phaser.Scene {
         this.scene.resume('objectivesScene');
         this.scene.resume('radioScene');
         this.scene.resume('stationScene');
-        this.scene.resume('textScene');
+        //this.scene.resume('textScene');
         this.scene.resume('UIScene');
+
+        setTimeout(() => {
+            this.scene.wake('textScene');
+          }, 1500);
+
 
         this.scene.setVisible(false, this.mapScene);
         
