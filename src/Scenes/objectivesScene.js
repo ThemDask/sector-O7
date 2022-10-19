@@ -53,4 +53,4 @@ var obj2State = "☐";
 import { transferObjectiveState } from "./textScene.js";
 import { get_debris_num } from "./combatScene.js";
 import { is_docked } from "./stationScene.js";
-import mapScene from "./mapScene.js";
+import menuScene from "./menuScene.js";

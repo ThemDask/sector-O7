@@ -285,4 +285,4 @@ var isEngineOn = false;
 
 // import dependencies
 import { loadingScreen } from "../loadingscreen.js";
-import mapScene from "./mapScene.js";
+import menuScene from "./menuScene.js";
