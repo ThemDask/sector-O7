@@ -1,21 +1,15 @@
 # RPG Spaceship game built on Phaser Framework using Javascript ES6.
-### Work In Progress
+
+![alt text](https://github.com/ThemDask/sector-O7/blob/master/assets/readme_imgs/img.png)
 
 
-### How to Run
+## How to Run
 upload files to a server and load "index.html" 
 
-## Button Configuration
+## Button Configuration/Controls
 
-* use the arrows to move around; be mindful of the 0 gravity effect.
-* use spacebar to boost
-* press r to activate combat mode
-* in combat mode, press w to fire on asteroids
+![alt text](https://github.com/ThemDask/sector-O7/blob/master/assets/readme_imgs/2.png)
 
 
-## Functionality
-* fuel burns as the ship moves with engines on
-* you can refuel at the home station
-* be careful of mines
 ### for a better overall experience, press f11 for full screen mode
 
