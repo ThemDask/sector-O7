@@ -5,6 +5,9 @@
 
 ## How to Run
 upload files to a server and load "index.html" 
+#### tested on 
+- VSCode's Live Server
+- XAMPP local server
 
 ## Button Configuration/Controls
 
