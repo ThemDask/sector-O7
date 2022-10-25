@@ -1,4 +1,4 @@
-import { transferplayer } from "./mainScene.js";
+import { transferplayer } from "./playerScene.js";
 //import { transferhealth } from "./mainScene.js";
 import { loadingScreen } from "../loadingscreen.js";
 

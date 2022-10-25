@@ -18,7 +18,7 @@ export default class menuScene extends Phaser.Scene {
     create() {
 
         // create world map & clickable levels
-        map = this.add.image(960, 540, 'map');
+        map = this.add.image(960, 540, 'map').setDepth(2);
 
         button1 = this.add.image(900, 340, 'menubox').setInteractive().setDepth(3);
         button1.on('clicked',this.startGame, this);
@@ -59,13 +59,14 @@ export default class menuScene extends Phaser.Scene {
 
 
         this.scene.pause('mainScene');
+        this.scene.pause('playerScene');
         this.scene.pause('combatScene');
         this.scene.pause('objectivesScene');
         this.scene.pause('radioScene');
         this.scene.pause('stationScene');
         this.scene.pause('textScene');
         this.scene.pause('UIScene');
-        
+        this.scene.setVisible(false,'playerScene');
     }
 
     update() { 
@@ -76,6 +77,7 @@ export default class menuScene extends Phaser.Scene {
     startGame() {
 
         this.scene.resume('mainScene');
+        this.scene.resume('playerScene');
         this.scene.resume('combatScene');
         this.scene.resume('objectivesScene');
         this.scene.resume('radioScene');
@@ -86,7 +88,9 @@ export default class menuScene extends Phaser.Scene {
         setTimeout(() => {
             this.scene.wake('textScene');
           }, 1500);
+
         this.scene.setVisible(false, this.mapScene);
+        this.scene.setVisible(true,'playerScene');
     }
 
     controls() {

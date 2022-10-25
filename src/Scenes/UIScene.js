@@ -1,4 +1,4 @@
-import { transferplayer, transfercombat } from "./mainScene.js";
+import { transferplayer, transfercombat } from "./playerScene.js";
 import { loadingScreen } from "../loadingscreen.js";
 
 // Scene to handle HUD & UI

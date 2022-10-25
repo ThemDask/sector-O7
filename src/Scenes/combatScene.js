@@ -170,5 +170,6 @@ export function get_debris_num() {
 }
 
 // import dependencies
-import { transferplayer, transferdebris } from "./mainScene.js";
+import { transferdebris } from "./mainScene.js";
+import { transferplayer } from "./playerScene.js";
 import { loadingScreen } from "../loadingscreen.js";
