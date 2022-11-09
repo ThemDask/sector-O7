@@ -18,7 +18,7 @@ export default class menuScene extends Phaser.Scene {
     create() {
 
         // create world map & clickable levels
-        map = this.add.image(960, 540, 'map').setDepth(2);
+        map = this.add.image(960, 538, 'map').setDepth(2);
 
         button1 = this.add.image(900, 340, 'menubox').setInteractive().setDepth(3);
         button1.on('clicked',this.startGame, this);
@@ -34,6 +34,9 @@ export default class menuScene extends Phaser.Scene {
 
         red_x = this.add.image(1230, 170, 'x').setInteractive().setDepth(-1).setScale(0.15);
         red_x.on('clicked',this.close, this);
+
+        var titleText = this.add.text(785, 170, 'SECTOR 07',
+         { font: '48px Oswald', fill: '#ffffff' }).setDepth(4);
 
         var startGameText =  this.add.text(840, 330, 'START GAME',
         { font: '20px Roboto', fill: '#ffffff' }).setDepth(4);
@@ -56,7 +59,7 @@ export default class menuScene extends Phaser.Scene {
             gameObject.emit('clicked', gameObject);
         }, this);
 
-
+        
 
         this.scene.pause('mainScene');
         this.scene.pause('playerScene');

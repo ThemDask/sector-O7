@@ -8,15 +8,15 @@ export default class UIScene extends Phaser.Scene {
     }
     preload(){
         // load HUDs, graphs & bars
-        this.load.image('barhud', '../assets/barhud.png');
-        this.load.image('combathud', '../assets/weaponhud.png');
-        this.load.image('speedhud', '../assets/speedhud.png');
-        this.load.image('speedhud_b', '../assets/speedhud_boost.png');
+        this.load.image('barhud', './assets/barhud.png');
+        this.load.image('combathud', './assets/weaponhud.png');
+        this.load.image('speedhud', './assets/speedhud.png');
+        this.load.image('speedhud_b', './assets/speedhud_boost.png');
 
 
-        this.load.image('fuelbar', '../assets/fuelbar.png');
-        this.load.image('healthbar', '../assets/healthbar.png');
-        this.load.image('speedbar', '../assets/speedbar.png');
+        this.load.image('fuelbar', './assets/fuelbar.png');
+        this.load.image('healthbar', './assets/healthbar.png');
+        this.load.image('speedbar', './assets/speedbar.png');
 
         this.load.image('angleship', './assets/ship_black.png');
         this.load.image('anglehud_box', './assets/anglehud_box.png');
